@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Kobalt",
+    "INSTALL_MSG" : "Thanks for installing Marry\n\nThis cog will marry you and some user (unlimited users)\n\n How to use: [p]marry @someone to get married [p]divorce @someone to get divorced.
+    "NAME" : "Marry",
+    "SHORT" : "Marry users and divorce",
+    "DESCRIPTION" : "Marry users and divorce too.",
+    "TAGS" : ["marry", "divorce", "fun"]
+}
