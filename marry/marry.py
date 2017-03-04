@@ -17,26 +17,33 @@ class marry:
 	@commands.command(pass_context=True)
 	async def marry(self, ctx, user: discord.Member):
 		server = ctx.message.server
-		author = ctx.message.author.mention
-		me = ctx.message.author.name
-		desc = ":ring:" + me + " *has proposed to* " + user.name + ":ring:"
-		name = ":church:" + user.name + ",  Do you accept ? :church:"
-		em = discord.Embed(description=desc, color=0XF23636)
-		em.add_field(name=name, value='Type yes to accept or no to decline.')
-		await self.bot.say(embed=em)
-		response = await self.bot.wait_for_message(author=user)
-
-		if response.content.lower().strip() == "yes":
-			await self._create_author(server, ctx, user)
-			await self._create_user(server, ctx, user)
-			msg = ":heart: Congratulations " + me + " and " + user.name + " :heart:"
-			em1 = discord.Embed(description=msg, color=0XF23636)
-			await self.bot.say(embed=em1)
-			dataIO.save_json(self.JSON, self.data)
+		author1 = ctx.message.author.mention
+		author = ctx.message.author.name
+		if user.mention == author1:
+			msg = 'You can\'t get married to yourself crazy guy.'
+			em0 = discord.Embed(description=msg, color=0XF23636)
+			await self.bot.say(embed=em0)
 		else:
-			msg = "The proposal between " + me + " and " + user.name + " has been declined."
-			em2 = discord.Embed(description=msg, color=0XF23636)
-			await self.bot.say(embed=em2)
+				desc = ":ring:" + author + " *has proposed to* " + user.name + ":ring:"
+				name = ":church:" + user.name + ",  Do you accept ? :church:"
+				em = discord.Embed(description=desc, color=0XF23636)
+				em.add_field(name=name, value='Type yes to accept or no to decline.')
+				await self.bot.say(embed=em)
+				response = await self.bot.wait_for_message(author=user)
+
+				if response.content.lower().strip() == "yes":
+					await self._create_author(server, ctx, user)
+					await self._create_user(server, ctx, user)
+					msg = ":heart: Congratulations " + author + " and " + user.name + " :heart:"
+					em1 = discord.Embed(description=msg, color=0XF23636)
+					await self.bot.say(embed=em1)
+					dataIO.save_json(self.JSON, self.data)
+				else:
+					msg = "The proposal between " + author + " and " + user.name + " has been declined."
+					em2 = discord.Embed(description=msg, color=0XF23636)
+					await self.bot.say(embed=em2)
+
+	
 
 	@commands.command(pass_context=True)
 	async def divorce(self, ctx, user: discord.Member):
@@ -49,7 +56,7 @@ class marry:
 			if user.name in self.data[server.id]["user"][author]["married_to"]:
 				await self._divorce(server, ctx, user)
 				me = ctx.message.author.name
-				msg = me + ' *has divorced to* ' + user.name + '.'
+				msg = ':broken_heart:  ' + me + ' *has divorced to* ' + user.name + ' :broken_heart:'
 				em = discord.Embed(description=msg, color=0XF23636)
 				await self.bot.say(embed=em)
 			else:
@@ -97,7 +104,7 @@ class marry:
 		if "married_to" not in self.data[server.id]["user"][user.name]:
 			self.data[server.id]["user"][user.name]["married_to"] = {}
 			dataIO.save_json(self.JSON, self.data)
-		if author not in self.data[server.id]["user"][author]["married_to"]:
+		if author not in self.data[server.id]["user"][user.name]["married_to"]:
 			self.data[server.id]["user"][user.name]["married_to"][author] = {}
 		dataIO.save_json(self.JSON, self.data)
 			#if author in self.data[server.id]["user"]:
@@ -124,10 +131,10 @@ def check_folder():
 
 
 def check_file():
-    f = 'data/married/married.json'
-    if not dataIO.is_valid_json(f):
-        dataIO.save_json(f, {})
-        print('Creating default married.json...')
+	f = 'data/married/married.json'
+	if not dataIO.is_valid_json(f):
+		dataIO.save_json(f, {})
+		print('Creating default married.json...')
 
 def setup(bot):
 	check_folder()
